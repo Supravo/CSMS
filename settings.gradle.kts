@@ -1,3 +1,3 @@
 rootProject.name = "ChargingStationManagementSystem"
 
-include("transaction-service", "authentication-service")
+include("csms-commons", "transaction-service", "authentication-service")
