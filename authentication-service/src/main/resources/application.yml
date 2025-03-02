@@ -1,16 +1,11 @@
 spring:
   application:
-    name: transaction-service
-
-server:
-  port: 9090
-
+    name: authentication-service
 
 kafka:
   bootstrap-servers: localhost:29092
-  groupid: csms-transaction-service-group
+  groupid: csms-authorization-service-group
   request:
     topic: csms-authorization-requests
   reply:
     topic: csms-authorization-responses
-    timeout: 5000
