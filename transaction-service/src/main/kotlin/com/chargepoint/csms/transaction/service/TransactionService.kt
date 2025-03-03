@@ -5,6 +5,8 @@ import com.chargepoint.csms.mapper.toDomain
 import com.chargepoint.csms.models.AuthorizationRequest
 import com.chargepoint.csms.models.AuthorizationResponse
 import org.apache.kafka.clients.producer.ProducerRecord
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.requestreply.ReplyingKafkaTemplate
 import org.springframework.stereotype.Service
@@ -17,6 +19,8 @@ class TransactionService(
     private val kafkaTemplate: ReplyingKafkaTemplate<Int, AuthorizationRequest, AuthorizationResponse>
 ) {
 
+    private val log: Logger = LoggerFactory.getLogger(this::class.java)
+
     @Value("\${kafka.request.topic}")
     private lateinit var requestTopic: String
 
@@ -27,9 +31,13 @@ class TransactionService(
         val producerRecord: ProducerRecord<Int, AuthorizationRequest>  = ProducerRecord(requestTopic, request)
         val future = kafkaTemplate.sendAndReceive(producerRecord)
         val sendResult = future.getSendFuture().get(10, TimeUnit.SECONDS)
-        println("\n\nSent headers: ${sendResult.producerRecord.headers()}, metadata: ${sendResult.recordMetadata}")
+        log.debug("Auth Request Sent with " +
+                "metadata: ${sendResult.recordMetadata}, " +
+                "headers: ${sendResult.producerRecord.headers()}, " +
+                "key: ${sendResult.producerRecord.key()}, " +
+                "body: ${sendResult.producerRecord.value()}")
         val response = future.get(10, TimeUnit.SECONDS)
-        println("Received headers: ${response.headers()}, message: ${response.value()}")
+        log.debug("Received Auth Response with message: ${response.value()}, headers: ${response.headers()}")
         return response.value()
     }
 }

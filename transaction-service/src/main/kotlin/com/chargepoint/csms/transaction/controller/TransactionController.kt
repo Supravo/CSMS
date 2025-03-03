@@ -5,6 +5,8 @@ import com.chargepoint.csms.dto.AuthorizationResponseDto
 import com.chargepoint.csms.mapper.toDto
 import com.chargepoint.csms.models.enums.AuthStatus
 import com.chargepoint.csms.transaction.service.TransactionService
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController
 class AuthorizationController(
     private val authService: TransactionService
 ) {
+
+    private val log: Logger = LoggerFactory.getLogger(this::class.java)
 
     @PostMapping("/authorize")
     fun authorize(@RequestBody request: AuthorizationRequestDto): ResponseEntity<AuthorizationResponseDto> {

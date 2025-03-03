@@ -2,6 +2,8 @@ package com.chargepoint.csms.transaction.config
 
 import com.chargepoint.csms.models.AuthorizationRequest
 import com.chargepoint.csms.models.AuthorizationResponse
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -13,6 +15,8 @@ import org.springframework.kafka.requestreply.ReplyingKafkaTemplate
 
 @Configuration
 open class KafkaConfig {
+
+    private val log: Logger = LoggerFactory.getLogger(this::class.java)
 
     @Value("\${kafka.reply.topic}")
     private lateinit var replyTopic: String
