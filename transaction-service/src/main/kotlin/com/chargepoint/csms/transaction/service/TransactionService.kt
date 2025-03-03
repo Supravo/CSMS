@@ -30,13 +30,13 @@ class TransactionService(
 
         val producerRecord: ProducerRecord<Int, AuthorizationRequest>  = ProducerRecord(requestTopic, request)
         val future = kafkaTemplate.sendAndReceive(producerRecord)
-        val sendResult = future.getSendFuture().get(10, TimeUnit.SECONDS)
+        val sendResult = future.getSendFuture().get()
         log.debug("Auth Request Sent with " +
                 "metadata: ${sendResult.recordMetadata}, " +
                 "headers: ${sendResult.producerRecord.headers()}, " +
                 "key: ${sendResult.producerRecord.key()}, " +
                 "body: ${sendResult.producerRecord.value()}")
-        val response = future.get(10, TimeUnit.SECONDS)
+        val response = future.get()
         log.debug("Received Auth Response with message: ${response.value()}, headers: ${response.headers()}")
         return response.value()
     }
