@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="TransactionServiceApplicationKt" type="JetRunConfigurationType" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="com.chargepoint.csms.transaction.TransactionServiceApplicationKt" />
+    <module name="ChargingStationManagementSystem.transaction-service.main" />
+    <shortenClasspath name="NONE" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
