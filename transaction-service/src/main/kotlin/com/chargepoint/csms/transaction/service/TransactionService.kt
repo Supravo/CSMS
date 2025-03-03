@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit
 
 @Service
 class TransactionService(
-    private val kafkaTemplate: ReplyingKafkaTemplate<String, AuthorizationRequest, AuthorizationResponse>
+    private val kafkaTemplate: ReplyingKafkaTemplate<Int, AuthorizationRequest, AuthorizationResponse>
 ) {
 
     @Value("\${kafka.request.topic}")
@@ -24,9 +24,12 @@ class TransactionService(
         val requestUuid = UUID.randomUUID().toString()
         val request = requestDto.toDomain(requestUuid)
 
-        val producerRecord = ProducerRecord(requestTopic, requestUuid, request)
+        val producerRecord: ProducerRecord<Int, AuthorizationRequest>  = ProducerRecord(requestTopic, request)
         val future = kafkaTemplate.sendAndReceive(producerRecord)
-        val response = future.get(10, TimeUnit.SECONDS).value()
-        return response
+        val sendResult = future.getSendFuture().get(10, TimeUnit.SECONDS)
+        println("\n\nSent headers: ${sendResult.producerRecord.headers()}, metadata: ${sendResult.recordMetadata}")
+        val response = future.get(10, TimeUnit.SECONDS)
+        println("Received headers: ${response.headers()}, message: ${response.value()}")
+        return response.value()
     }
 }
